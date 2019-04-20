@@ -1,0 +1,24 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+const Navbar = ({ location: { pathname } }) => {
+  return (
+    <ul className="nav nav-tabs">
+      <li className="nav-item">
+        <Link className={`nav-link ${pathname === '/' ? 'active' : ''}`} to="/">
+          Home
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link
+          className={`nav-link ${pathname === '/users' ? 'active' : ''}`}
+          to="/users"
+        >
+          Users
+        </Link>
+      </li>
+    </ul>
+  )
+}
+
+export default Navbar
