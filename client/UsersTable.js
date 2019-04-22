@@ -1,6 +1,7 @@
 import React from 'react'
+import Hilite from './Hilite'
 
-const UsersTable = ({ users }) => {
+const UsersTable = ({ users, searchTerm }) => {
   return (
     <table className="table table-striped">
       <thead>
@@ -17,11 +18,15 @@ const UsersTable = ({ users }) => {
           const { id, firstName, lastName, middleName, email, title } = user
           return (
             <tr key={id}>
-              <td>{firstName}</td>
-              <td>{lastName}</td>
-              <td>{middleName}</td>
-              <td>{email}</td>
-              <td>{title}</td>
+              {[firstName, lastName, middleName, email, title].map(
+                (userField, index) => {
+                  return (
+                    <td key={index}>
+                      <Hilite searchTerm={searchTerm} string={userField} />
+                    </td>
+                  )
+                }
+              )}
             </tr>
           )
         })}

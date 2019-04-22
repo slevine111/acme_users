@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import UsersTable from './UsersTable'
+import SearchBar from './SearchBar'
 
 class UsersPage extends Component {
   constructor() {
@@ -13,44 +14,63 @@ class UsersPage extends Component {
   }
 
   componentDidMount() {
-    return this.loadData(this.props.match.params.id || '')
+    return this.loadData(this.props.location.pathname)
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.match.params.id !== this.props.match.params.id) {
-      return this.loadData(this.props.match.params.id || '')
+    const {
+      match: { params }
+    } = this.props
+    if (
+      prevProps.match.params.id !== params.id ||
+      prevProps.match.params.searchTerm !== params.searchTerm
+    ) {
+      return this.loadData(this.props.location.pathname)
     }
   }
 
-  loadData(apiId) {
+  loadData(route) {
     return axios
-      .get(`https://acme-users-api.herokuapp.com/api/users/${apiId}`)
+      .get(`https://acme-users-api.herokuapp.com/api${route}`)
       .then(({ data }) => this.setState(data))
   }
 
   goToRoute(requestedId) {
-    this.props.history.push(`/users/${requestedId}`)
+    const {
+      history,
+      match: { params }
+    } = this.props
+    history.push(
+      `/users/${
+        params.searchTerm ? `search/${params.searchTerm}/` : ''
+      }${requestedId}`
+    )
   }
 
   render() {
     const { goToRoute } = this
-    const routerParam = Number(this.props.match.params.id)
+    const {
+      history,
+      match: { params }
+    } = this.props
+    const routerParam = Number(params.id || 0)
     const maxRouteId = Math.floor(this.state.count / 50)
     const arrayOfButtons = [
       {
         label: 'First',
         type: 'info',
         onClickMethod: () => goToRoute(0),
-        makeDisabled: false
+        makeDisabled: routerParam === 0
       },
       {
         label: 'Prev',
         type: 'info',
-        onClickMethod: () => goToRoute(routerParam - 1),
-        makeDisabled: false
+        onClickMethod: () =>
+          goToRoute(routerParam - 1 >= 0 ? routerParam - 1 : 0),
+        makeDisabled: routerParam === 0
       },
       {
-        label: routerParam + 1 || 1,
+        label: routerParam + 1,
         type: 'primary',
         onClickMethod: () => {},
         makeDisabled: false
@@ -58,19 +78,22 @@ class UsersPage extends Component {
       {
         label: 'Next',
         type: 'info',
-        onClickMethod: () => goToRoute(routerParam + 1 || 1),
-        makeDisabled: maxRouteId === routerParam || 0
+        onClickMethod: () => goToRoute(routerParam + 1),
+        makeDisabled: maxRouteId === routerParam
       },
       {
         label: 'Last',
         type: 'info',
         onClickMethod: () => goToRoute(maxRouteId),
-        makeDisabled: maxRouteId === routerParam || 0
+        makeDisabled: maxRouteId === routerParam
       }
     ]
 
     return (
       <div>
+        <div>
+          {this.state.count} Results. Page {routerParam + 1} of {maxRouteId + 1}
+        </div>
         {arrayOfButtons.map(button => {
           const { label, type, onClickMethod, makeDisabled } = button
           return (
@@ -85,8 +108,8 @@ class UsersPage extends Component {
             </button>
           )
         })}
-
-        <UsersTable users={this.state.users} />
+        <SearchBar history={history} searchTerm={params.searchTerm} />
+        <UsersTable users={this.state.users} searchTerm={params.searchTerm} />
       </div>
     )
   }

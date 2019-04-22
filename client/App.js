@@ -15,7 +15,8 @@ const App = () => {
             path="/"
             render={() => <h6>The greatest acme project</h6>}
           />
-          <Route path="/users/:id?" component={UsersPage} />
+          <Route exact path="/users/:id?" component={UsersPage} />
+          <Route path="/users/search/:searchTerm/:id?" component={UsersPage} />
         </Fragment>
       </HashRouter>
     </div>
