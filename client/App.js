@@ -15,8 +15,7 @@ const App = () => {
             path="/"
             render={() => <h6>The greatest acme project</h6>}
           />
-          <Route exact path="/users/:id?" component={UsersPage} />
-          <Route path="/users/search/:searchTerm/:id?" component={UsersPage} />
+          <Route path="/users" component={UsersPage} />
         </Fragment>
       </HashRouter>
     </div>
@@ -24,3 +23,6 @@ const App = () => {
 }
 
 export default App
+
+//<Route exact path="/users/:id?" component={UsersPage} />
+//<Route path="/users/search/:searchTerm/:id?" component={UsersPage} />

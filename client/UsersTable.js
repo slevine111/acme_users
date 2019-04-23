@@ -1,7 +1,8 @@
 import React from 'react'
 import Hilite from './Hilite'
+import { Route } from 'react-router-dom'
 
-const UsersTable = ({ users, searchTerm }) => {
+const UsersTable = ({ users }) => {
   return (
     <table className="table table-striped">
       <thead>
@@ -22,7 +23,20 @@ const UsersTable = ({ users, searchTerm }) => {
                 (userField, index) => {
                   return (
                     <td key={index}>
-                      <Hilite searchTerm={searchTerm} string={userField} />
+                      <Route
+                        exact
+                        path="/users/:id?"
+                        render={() => <div>{userField}</div>}
+                      />
+                      <Route
+                        path="/users/search/:searchTerm/:id?"
+                        render={({ match: { params } }) => (
+                          <Hilite
+                            searchTerm={params.searchTerm}
+                            string={userField}
+                          />
+                        )}
+                      />
                     </td>
                   )
                 }

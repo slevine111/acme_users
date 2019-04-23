@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Navbar = ({ location: { pathname } }) => {
+  console.log('in navabr remount')
   return (
     <ul className="nav nav-tabs">
       <li className="nav-item">
@@ -11,7 +12,7 @@ const Navbar = ({ location: { pathname } }) => {
       </li>
       <li className="nav-item">
         <Link
-          className={`nav-link ${pathname === '/users' ? 'active' : ''}`}
+          className={`nav-link ${pathname !== '/' ? 'active' : ''}`}
           to="/users"
         >
           Users
