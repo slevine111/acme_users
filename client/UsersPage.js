@@ -5,6 +5,7 @@ import SearchBar from './SearchBar'
 
 class UsersPage extends Component {
   constructor() {
+    console.log('in constructor')
     super()
     this.state = {
       count: 0,

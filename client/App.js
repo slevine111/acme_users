@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { HashRouter, Route } from 'react-router-dom'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import Navbar from './Navbar'
 import UsersPage from './UsersPage'
 
@@ -15,8 +15,13 @@ const App = () => {
             path="/"
             render={() => <h6>The greatest acme project</h6>}
           />
-          <Route exact path="/users/:id?" component={UsersPage} />
-          <Route path="/users/search/:searchTerm/:id?" component={UsersPage} />
+          <Switch>
+            <Route exact path="/users/:id?" component={UsersPage} />
+            <Route
+              path="/users/search/:searchTerm/:id?"
+              component={UsersPage}
+            />
+          </Switch>
         </Fragment>
       </HashRouter>
     </div>
